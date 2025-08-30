@@ -6,6 +6,8 @@
     "dev": "bun index.ts"
   },
   "devDependencies": {
+    "@types/amqp-connection-manager": "^3.4.5",
+    "@types/amqplib": "^0.10.7",
     "@types/express": "^5.0.3",
     "bun-types": "latest"
   },
@@ -13,9 +15,12 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@langchain/openai": "^0.4.2",
     "@langchain/core": "^0.3.37",
+    "@langchain/openai": "^0.4.2",
+    "@sinclair/typebox": "^0.34.41",
     "@types/mongoose": "^5.11.97",
+    "amqp-connection-manager": "^4.1.14",
+    "amqplib": "^0.10.9",
     "express": "^5.1.0",
     "mongoose": "^8.18.0",
     "openai": "^5.15.0"
