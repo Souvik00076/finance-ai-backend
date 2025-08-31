@@ -29,6 +29,7 @@ async function handleAnalysis(content: ConsumeMessage) {
     phone: phoneNumber
   }
   await UserData.insertOne(userData);
+  console.log(userData);
   console.log("inserted")
 }
 export async function aiAnalyzaerConsumer() {

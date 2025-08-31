@@ -50,7 +50,7 @@ export class OperationConsumer {
       setup: async (channel: Channel | ConfirmChannel) => {
         channel.prefetch(this.prefetch)
         const response = await channel.assertQueue(this.queue, {
-          durable: this.durable,
+          durable: true,
         });
         await channel.bindQueue(response.queue, this.exchange, this.routingKey);
       },
