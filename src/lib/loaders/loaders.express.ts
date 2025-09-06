@@ -32,7 +32,7 @@ export class ExpressLoader extends BaseLoader {
     }));
     this.app.use('/api/v1', new MainRoute('/').getRouter());
     this.app.use(new CatchAllError().execute);
-    this.app.listen(3000, () => {
+    this.app.listen(8000, () => {
       console.log(`Express loaded at port : ${process.env.PORT!}`);
     });
   }

@@ -1,4 +1,4 @@
-import { EXCHANGES, type Operation } from "../@types/broker";
+import { EXCHANGES, PublisherConfig, type Operation } from "../@types/broker";
 import { producerRabbitMQManager } from "./broker.MqManager";
 import type {
   AmqpConnectionManager,
@@ -13,12 +13,11 @@ export class OperationPublisher {
   private exchangeType: "direct" | "topic" | "fanout";
   private durable: boolean;
   private name: string;
+
   constructor(
-    exchange: EXCHANGES,
-    exchangeType: "direct" | "topic" | "fanout",
-    durable: boolean,
-    name: string,
+    config: PublisherConfig
   ) {
+    const { exchange, exchangeType, durable = false, name } = config;
     this.exchange = exchange;
     this.exchangeType = exchangeType;
     this.durable = durable;

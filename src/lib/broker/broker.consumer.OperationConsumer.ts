@@ -1,6 +1,6 @@
 import type { Channel, ConfirmChannel, ConsumeMessage } from "amqplib";
 import { consumerRabbitMQManager } from "./broker.MqManager";
-import { EXCHANGES, ROUTING_KEYS } from "../@types/broker";
+import { ConsumerConfig, ConsumerExchange, EXCHANGES, ROUTING_KEYS } from "../@types/broker";
 import type {
   AmqpConnectionManager,
   ChannelWrapper,
@@ -17,31 +17,24 @@ type Options = {
 export class OperationConsumer {
   private channel: ChannelWrapper | null = null;
   private consumerName: string;
-  private exchange: EXCHANGES;
-  private routingKey: ROUTING_KEYS;
+  private exchanges: ConsumerExchange[];
   private queue: string;
   private options: Options;
   private prefetch: number;
   private durable: boolean;
   private connection: AmqpConnectionManager | null = null;
 
-  constructor(
-    queue: string,
-    consumerName: string,
-    durable: boolean,
-    exchange: EXCHANGES,
-    routingKey: ROUTING_KEYS,
-    options: Options,
-    prefetch: number = 100
-  ) {
+  constructor(config: ConsumerConfig) {
+    const { queue, consumerName, durable = false, options = {}, prefetch = 10, exchanges } = config;
     this.queue = queue;
     this.consumerName = consumerName;
     this.durable = durable;
-    this.exchange = exchange;
-    this.routingKey = routingKey;
+    this.exchanges = exchanges;
     this.options = options;
     this.prefetch = prefetch;
   }
+
+
 
   async initialize(): Promise<OperationConsumer> {
     const { connection } = await consumerRabbitMQManager.connect();
@@ -50,9 +43,13 @@ export class OperationConsumer {
       setup: async (channel: Channel | ConfirmChannel) => {
         channel.prefetch(this.prefetch)
         const response = await channel.assertQueue(this.queue, {
-          durable: true,
+          durable: this.durable
         });
-        await channel.bindQueue(response.queue, this.exchange, this.routingKey);
+        for (const exchange of this.exchanges) {
+          for (const routingKey of exchange.routingKeys) {
+            await channel.bindQueue(response.queue, exchange.exchange, routingKey);
+          }
+        }
       },
     });
     this.channel.waitForConnect().catch(error => {

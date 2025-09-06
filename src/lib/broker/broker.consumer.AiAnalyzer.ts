@@ -1,5 +1,5 @@
 import { ConsumeMessage } from "amqplib";
-import { AiContentDto, EXCHANGES, QUEUE, ROUTING_KEYS, WhatsappContentDto } from "../@types/broker";
+import { AiContentDto, ConsumerConfig, EXCHANGES, QUEUE, ROUTING_KEYS, WhatsappContentDto } from "../@types/broker";
 import { OperationConsumer } from "./broker.consumer.OperationConsumer";
 import { Model } from "../ai/Model";
 import { messageAnalysisprompt } from "../ai/prompt";
@@ -33,13 +33,19 @@ async function handleAnalysis(content: ConsumeMessage) {
   console.log("inserted")
 }
 export async function aiAnalyzaerConsumer() {
+  const initializer: ConsumerConfig = {
+    exchanges: [
+      {
+        exchange: EXCHANGES.AI_ANALYSIS,
+        routingKeys: [ROUTING_KEYS.AI_NEW_MESSAGE]
+      }
+    ],
+    durable: true,
+    consumerName: "Ai Analysis Consumer For Whatsapp inbound messages",
+    queue: QUEUE.AI_ANALYSIS_QUEUE
+  }
   const newTimesheetConsumer = await new OperationConsumer(
-    QUEUE.AI_ANALYSIS_QUEUE,
-    "Ai Analysis Consumer",
-    false,
-    EXCHANGES.AI_ANALYSIS,
-    ROUTING_KEYS.AI_ANALYSIS,
-    {}
+    initializer
   ).initialize();
   newTimesheetConsumer.startConsumer(handleAnalysis);
   console.log("AI Analysis Consumer started")
