@@ -1,7 +1,7 @@
 import { OperationPublisher } from "./broker.publisher.OperationPublisher";
 import { EXCHANGES, PublisherConfig, ROUTING_KEYS } from "../@types/broker";
 
-class AianalysisPublisher {
+export class AianalysisPublisher {
   private static instance: AianalysisPublisher | null = null;
   private static initializationPromise: Promise<AianalysisPublisher> | null = null;
   private publisher: OperationPublisher | null = null;

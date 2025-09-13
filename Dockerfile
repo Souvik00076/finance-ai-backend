@@ -19,8 +19,8 @@ COPY . .
 RUN bun build index.ts \
   --outdir dist \
   --target node \
-  --minify \
-  --sourcemap
+  --sourcemap \
+  --external mongoose
 
 FROM oven/bun:alpine AS prod_runtime
 

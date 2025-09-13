@@ -11,8 +11,9 @@ export class WebhookController implements IPost {
     try {
       const data = req.body;
       await handleAiPublish(data);
-      res.sendStatus(201);
+      res.status(201).json({ success: true, message: "Data inserted successfully" });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

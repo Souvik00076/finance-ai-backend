@@ -1,3 +1,4 @@
+import { AianalysisPublisher } from "../broker/borker.publisher.AiPublisher";
 import { aiAnalyzaerConsumer } from "../broker/broker.consumer.AiAnalyzer";
 import { consumerRabbitMQManager, producerRabbitMQManager } from "../broker/broker.MqManager";
 import { BaseLoader } from "./loaders.base";
@@ -18,6 +19,8 @@ export class BrokerLoader extends BaseLoader {
   protected async load() {
     await producerRabbitMQManager.connect();
     await consumerRabbitMQManager.connect();
+    await AianalysisPublisher.getInstance();
     await aiAnalyzaerConsumer();
+    console.log("Not called?")
   }
 }

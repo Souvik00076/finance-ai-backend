@@ -7,7 +7,8 @@ export class MongoDBLoader extends BaseLoader {
   private connectionString: string | null = null;
   private constructor() {
     super('MongoDB');
-    this.connectionString = process.env.MONGO_URI!;
+    const rawUri = process.env.MONGO_URI;
+    this.connectionString = rawUri?.replace(/^["']|["']$/g, '') || null;
   }
 
   public static async getInstance(): Promise<MongoDBLoader> {

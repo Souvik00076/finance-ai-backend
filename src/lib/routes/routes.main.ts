@@ -11,6 +11,13 @@ export class MainRoute extends BaseRouter {
     this.setChildren({
       router: new WebhookRouter("/hook")
     })
+    this.getRouter().get('/test', (req, res) => {
+
+      res.json({
+        status: 201,
+        data: "UP annd running"
+      })
+    })
     this.registerChildren();
   }
 }

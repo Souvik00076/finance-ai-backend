@@ -9,20 +9,20 @@
     "@types/amqp-connection-manager": "^3.4.5",
     "@types/amqplib": "^0.10.7",
     "@types/express": "^5.0.3",
+    "@langchain/core": "^0.3.37",
+    "@langchain/openai": "^0.4.2",
+    "@sinclair/typebox": "^0.34.41",
+    "@types/mongoose": "^5.11.97",
     "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@langchain/core": "^0.3.37",
-    "@langchain/openai": "^0.4.2",
-    "@sinclair/typebox": "^0.34.41",
-    "@types/mongoose": "^5.11.97",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.9",
     "express": "^5.1.0",
-    "mongoose": "^8.18.0",
+    "mongoose": "^7.8.3",
     "openai": "^5.15.0"
   }
 }
