@@ -7,11 +7,12 @@ export class WebhookController implements IPost {
   constructor() {
     this.post = this.post.bind(this);
   }
+
   async post(req: Request, res: Response, next: NextFunction) {
     try {
       const data = req.body;
       await handleAiPublish(data);
-      res.status(201).json({ success: true, message: "Data inserted successfully" });
+      res.json({ message: "OK" })
     } catch (error) {
       console.log(error);
       next(error);

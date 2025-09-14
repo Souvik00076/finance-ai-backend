@@ -24,7 +24,7 @@ export class WebhookRouter extends BaseRouter {
         .update(req.rawBody!)
         .digest("base64");
       if (hash === hmacHeader) {
-        next();
+        return next();
       }
       throw new Forbidden('Unauthorized')
     }, controller.post)

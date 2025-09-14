@@ -6,7 +6,7 @@ import { messageAnalysisprompt } from "../ai/prompt";
 import { JsonOutputParser } from "@langchain/core/output_parsers";
 import { AiContent } from "../@types";
 import { validateRequest } from "../utils/utils.validateRequest";
-import { UserData } from "../schemas/schema.UserData";
+import { TUserData, UserData } from "../schemas/schema.UserData";
 
 const validator = validateRequest<AiContentDto>(AiContentDto);
 async function handleAnalysis(content: ConsumeMessage) {
@@ -22,13 +22,13 @@ async function handleAnalysis(content: ConsumeMessage) {
     return;
   }
   const phoneNumber = data.From.split(':')[1]
-  const userData: UserData = {
+  const userData: TUserData[] = [{
     WaId: data.WaId,
     categories: modelResult.categories!,
     items: modelResult.items!,
     phone: phoneNumber
-  }
-  await UserData.insertOne(userData);
+  }]
+  await UserData.insertMany(userData)
 }
 export async function aiAnalyzaerConsumer() {
   const initializer: ConsumerConfig = {

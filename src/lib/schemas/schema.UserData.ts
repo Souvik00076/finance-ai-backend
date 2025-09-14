@@ -1,7 +1,7 @@
-import { Document, model, Schema } from "mongoose";
+import mongoose, { Document, model, Schema } from "mongoose";
 import { Item } from "../@types";
 
-export type UserData = {
+export type TUserData = {
   WaId: string;
   categories: string[];
   items: Item[];
@@ -46,4 +46,4 @@ const userDataSchema = new Schema<IUserData>({
   timestamps: true
 });
 
-export const UserData = model<IUserData>('user_data', userDataSchema);
+export const UserData = mongoose.model<IUserData>('user_data', userDataSchema);
