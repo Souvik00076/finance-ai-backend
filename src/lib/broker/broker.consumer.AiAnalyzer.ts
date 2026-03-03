@@ -29,6 +29,7 @@ async function handleAnalysis(content: ConsumeMessage) {
     phone: phoneNumber
   }]
   await UserData.insertMany(userData)
+  console.log("Message loaded in db")
 }
 export async function aiAnalyzaerConsumer() {
   const initializer: ConsumerConfig = {

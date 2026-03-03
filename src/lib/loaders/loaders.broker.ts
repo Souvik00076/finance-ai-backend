@@ -21,6 +21,5 @@ export class BrokerLoader extends BaseLoader {
     await consumerRabbitMQManager.connect();
     await AianalysisPublisher.getInstance();
     await aiAnalyzaerConsumer();
-    console.log("Not called?")
   }
 }

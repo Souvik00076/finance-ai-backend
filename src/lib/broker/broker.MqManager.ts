@@ -7,7 +7,9 @@ abstract class RabbitMqManager {
   private connection: AmqpConnectionManager | null = null;
   private connecting: Promise<any> | null = null;
   public constructor(url: string = process.env.RABBIT_MQ_URL!) {
+    console.log(url);
     this.connection = amqp.connect([url])
+
   }
   public async connect() {
     try {

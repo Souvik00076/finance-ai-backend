@@ -4,12 +4,13 @@ export class Model {
   private llmInstance: ChatOpenAI;
   private constructor() {
     this.llmInstance = new ChatOpenAI({
-      model: "gemini-2.0-flash",
+      model: "llama-3.3-70b-versatile",
       configuration: {
-        baseURL: 'https://generativelanguage.googleapis.com/v1beta',
-        apiKey: 'AIzaSyC9ye9FRdvK_xtDpuMRP2_pH1JS6yq7b9o',
+        baseURL: 'https://api.groq.com/openai/v1',
+        apiKey: process.env.GROQ_API_KEY!,
       },
-      streaming: false
+      streaming: false,
+      timeout: 30000,
     });
   }
 

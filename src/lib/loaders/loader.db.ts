@@ -1,5 +1,6 @@
 import { BaseLoader } from "./loaders.base";
 import mongoose, { Connection } from 'mongoose'
+
 export class MongoDBLoader extends BaseLoader {
   private static instance: MongoDBLoader | null = null;
   private connection: Connection | null = null;

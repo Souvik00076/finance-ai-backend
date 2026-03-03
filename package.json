@@ -19,6 +19,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@langchain/google-genai": "^2.1.23",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.9",
     "express": "^5.1.0",
