@@ -15,7 +15,7 @@ RUN bun install --production --frozen-lockfile
 FROM dev-deps AS build
 
 COPY . .
-
+ENV BUN_JSC_forceBaseline=1
 RUN bun build index.ts \
   --outdir dist \
   --target node \
@@ -32,8 +32,8 @@ COPY --from=build /app/package.json .
 
 # Create non-root user and switch to it
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001 && \
-    chown -R nodejs:nodejs /app
+  adduser -S nodejs -u 1001 && \
+  chown -R nodejs:nodejs /app
 
 USER nodejs
 
