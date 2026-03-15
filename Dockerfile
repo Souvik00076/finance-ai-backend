@@ -30,6 +30,13 @@ COPY --from=prod-deps /app/node_modules ./
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/package.json .
 
+# Create non-root user and switch to it
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001 && \
+    chown -R nodejs:nodejs /app
+
+USER nodejs
+
 EXPOSE 8000
 
 CMD ["bun", "dist/index.js"]

@@ -1,0 +1,18 @@
+FROM oven/bun:alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json bun.lockb* ./
+
+# Install ALL dependencies (including devDependencies)
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 8000
+
+# Run in development mode with watch mode
+CMD ["bun", "--watch", "index.ts"]
