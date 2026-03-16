@@ -1,15 +1,25 @@
-FROM oven/bun:alpine AS base
+FROM node:20-alpine AS base
 WORKDIR /app
+
+# Copy package files
 COPY package.json *.lock* ./
-RUN bun install --frozen-lockfile
+
+# Install dependencies (tsx will be installed from devDependencies)
+RUN npm install
+
+# Copy application code
 COPY . .
 
+# Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
   adduser -S nodejs -u 1001 && \
   chown -R nodejs:nodejs /app
+
 USER nodejs
 EXPOSE 8000
-CMD ["bun", "index.ts"]
+
+# Run TypeScript directly with tsx
+CMD ["npx", "tsx", "index.ts"]
 
 
 # FROM oven/bun:alpine AS base

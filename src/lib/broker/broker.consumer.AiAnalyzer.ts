@@ -14,8 +14,8 @@ async function handleAnalysis(content: ConsumeMessage) {
   const model = Model.getInstance().getChatInstance();
   const chain =
     messageAnalysisprompt
-      .pipe(model)
-      .pipe(new JsonOutputParser<AiContent>());
+  pipe(model)
+    .pipe(new JsonOutputParser<AiContent>());
   const modelResult = await chain.invoke({ input_text: data.Body });
   if (modelResult.type === 'irrelevant') {
     console.log("wrong type")

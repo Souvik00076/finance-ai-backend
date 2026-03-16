@@ -13,7 +13,8 @@
     "@langchain/openai": "^0.4.2",
     "@sinclair/typebox": "^0.34.41",
     "@types/mongoose": "^5.11.97",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "tsx": "^4.7.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
