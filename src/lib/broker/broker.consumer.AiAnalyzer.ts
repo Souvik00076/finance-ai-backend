@@ -12,9 +12,8 @@ const validator = validateRequest<AiContentDto>(AiContentDto);
 async function handleAnalysis(content: ConsumeMessage) {
   const { operationId, data } = validator.verify(JSON.parse(content.content.toString()));
   const model = Model.getInstance().getChatInstance();
-  const chain =
-    messageAnalysisprompt
-  pipe(model)
+  const chain = messageAnalysisprompt
+    .pipe(model)
     .pipe(new JsonOutputParser<AiContent>());
   const modelResult = await chain.invoke({ input_text: data.Body });
   if (modelResult.type === 'irrelevant') {
