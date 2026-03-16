@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json *.lock* ./
 
 # Install dependencies (tsx will be installed from devDependencies)
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy application code
 COPY . .
