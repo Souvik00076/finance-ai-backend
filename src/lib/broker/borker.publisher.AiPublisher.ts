@@ -40,7 +40,6 @@ export class AianalysisPublisher {
   }
 }
 
-
 export const handleAiPublish = async (
   data: Record<string, unknown>,
   metadata?: Record<string, unknown>

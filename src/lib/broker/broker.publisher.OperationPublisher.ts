@@ -13,17 +13,20 @@ export class OperationPublisher {
   private exchangeType: "direct" | "topic" | "fanout";
   private durable: boolean;
   private name: string;
-
   constructor(
     config: PublisherConfig
   ) {
-    const { exchange, exchangeType, durable = false, name } = config;
+    const {
+      exchange,
+      exchangeType,
+      durable = false,
+      name
+    } = config;
     this.exchange = exchange;
     this.exchangeType = exchangeType;
     this.durable = durable;
     this.name = name;
   }
-
   async initialize(): Promise<OperationPublisher> {
     const data = await producerRabbitMQManager.connect();
     this.connection = data.connection;
@@ -39,7 +42,6 @@ export class OperationPublisher {
     console.log(`${this.name} Connected`);
     return this;
   }
-
   async publish(operation: Operation): Promise<boolean> {
     if (!this.channel) {
       throw new Error("Channel not initialized");
@@ -68,7 +70,6 @@ export class OperationPublisher {
       throw error;
     }
   }
-
   async close(): Promise<void> {
     await this.channel?.close();
     await this.connection?.close();

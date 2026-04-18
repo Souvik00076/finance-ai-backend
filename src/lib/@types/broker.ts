@@ -22,6 +22,27 @@ export enum EXCHANGES {
   AI_ANALYSIS = 'AI_ANALYSIS'
 }
 
+
+export interface ExchangeBinding {
+  exchange: EXCHANGES
+  routingKeys: string[]
+}
+
+export type Options = {
+  noAck?: boolean
+  exclusive?: boolean
+  consumerTag?: string
+  arguments?: any
+}
+export interface ConsumerInitializer {
+  queue: string
+  consumerName: string
+  durable?: boolean
+  exchangeBindings: ExchangeBinding[]
+  prefetch?: number
+  options?: Options
+}
+
 export enum PUBLISHER_TYPE {
 }
 
@@ -38,24 +59,12 @@ export type ConsumerOptions = {
   consumerTag?: string;
   arguments?: any;
 };
-export type ConsumerExchange =
-  {
-    exchange: EXCHANGES;
-    routingKeys: string[];
-  };
+
 export interface PublisherConfig {
   exchange: EXCHANGES;
   exchangeType: 'direct' | 'topic' | 'fanout';
   durable?: boolean;
   name: string;
-}
-export interface ConsumerConfig {
-  exchanges: ConsumerExchange[];
-  queue: string;
-  consumerName: string;
-  options?: ConsumerOptions;
-  prefetch?: number;
-  durable?: boolean;
 }
 
 
@@ -74,18 +83,19 @@ export const BrokerContent = Type.Object({
   timestamp: Type.Number(),
 });
 
-export type WhatsappContentDto = Static<typeof WhatsappContentDto>;
-export const WhatsappContentDto = Type.Object({
+export type ProviderContentDto = Static<typeof ProviderContentDto>;
+export const ProviderContentDto = Type.Object({
   Body: Type.String(),
-  WaId: Type.String(),
-  From: Type.String()
+  From: Type.String(),
+  origin: Type.String(),
+  created_at: Type.Number()
 })
 
 export type AiContentDto = Static<typeof AiContentDto>;
 export const AiContentDto = Type.Intersect([
   BrokerContent,
   Type.Object({
-    data: WhatsappContentDto
+    data: ProviderContentDto
   })
 ])
 
