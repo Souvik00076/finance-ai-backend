@@ -7,6 +7,7 @@ declare global {
   namespace Express {
     interface Request {
       rawBody?: Buffer;
+      channel_type: 'whatsapp' | 'telegram'
     }
   }
 }
@@ -23,10 +24,16 @@ export class WebhookRouter extends BaseRouter {
       const hash = createHmac("sha256", process.env.HD_SIG!)
         .update(req.rawBody!)
         .digest("base64");
+      req.channel_type = 'whatsapp'
       if (hash === hmacHeader) {
         return next();
       }
       throw new Forbidden('Unauthorized')
     }, controller.post)
+
+    router.post("/hookdeck/telegram", (req, res, next) => {
+      req.channel_type = 'telegram'
+      return next();
+    }, controller.post);
   }
 }

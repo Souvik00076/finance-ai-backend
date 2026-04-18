@@ -2,13 +2,14 @@ import mongoose, { Document, model, Schema } from "mongoose";
 import { Item } from "../@types";
 
 export type TUserData = {
-  WaId: string;
+  chat_id?: string;
   categories: string[];
   items: Item[];
-  phone: string;
+  source: string;
+  created_at_ms: number;
 }
 
-export interface IUserData extends UserData, Document { }
+export interface IUserData extends TUserData, Document { }
 
 const itemSchema = new Schema<Item>({
   name: {
@@ -26,22 +27,27 @@ const itemSchema = new Schema<Item>({
 }, { _id: false });
 
 const userDataSchema = new Schema<IUserData>({
-  WaId: {
+  chat_id: {
     type: String,
     required: true,
+  },
+  source: {
+    type: String,
+    required: true
+  },
+  created_at_ms: {
+    type: Number,
+    required: true,
+    default: () => Date.now()
   },
   categories: {
-    type: [String],
-    default: []
-  },
+  type: [String],
+  default: []
+},
   items: {
-    type: [itemSchema],
-    default: []
-  },
-  phone: {
-    type: String,
-    required: true,
-  }
+  type: [itemSchema],
+  default: []
+}
 }, {
   timestamps: true
 });

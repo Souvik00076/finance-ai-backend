@@ -11,7 +11,27 @@ export class WebhookController implements IPost {
   async post(req: Request, res: Response, next: NextFunction) {
     try {
       const data = req.body;
-      await handleAiPublish(data);
+      const channel_type = req.channel_type;
+      const aiData = {
+        Body: null,
+        From: '',
+        created_at: Date.now(),
+        origin: channel_type
+      }
+      if (channel_type === 'whatsapp') {
+        aiData.Body = data.Body;
+        aiData.From = data.From;
+      }
+      if (channel_type === 'telegram') {
+        if (!data.message.text) {
+          res.json({ message: "Ok" })
+          return
+        }
+
+        aiData.Body = data.message.text;
+        aiData.From = String(data.message.from.id);
+      }
+      await handleAiPublish(aiData);
       res.json({ message: "OK" })
     } catch (error) {
       console.log(error);
