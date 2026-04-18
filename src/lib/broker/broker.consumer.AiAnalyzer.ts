@@ -17,7 +17,9 @@ async function handleAnalysis(content: ConsumeMessage) {
   const chain = messageAnalysisprompt
     .pipe(model)
     .pipe(new JsonOutputParser<AiContent>());
+
   const modelResult = await chain.invoke({ input_text: aiData.Body });
+  console.log(modelResult);
   if (modelResult.type === 'irrelevant') {
     return;
   }

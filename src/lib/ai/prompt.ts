@@ -89,7 +89,7 @@ Don't hallucinate. If this looks like menu/receipt data with prices, parse it. I
 
 Now parse this input:
 {input_text}
-Dont hallucinate
+
 Return ONLY the JSON object, no additional text:
 `
 )
