@@ -5,23 +5,31 @@ function addBraces(str: string) {
 export const messageAnalysisprompt = PromptTemplate.fromTemplate(
   addBraces(`Parse the following text which includes  title and contain item names and prices. Also categorize the type of spending.
 
-Example Input:
+Example Input 1:
 McDonald's India
 Big Mac ₹299
-French Fries $2.49
 Coca Cola 150
 Free Sample
 
-Example Output:
+Example Output 1:
 {
   "title": "McDonald's India",
   "categories": ["food"],
   "items": [
-    {"name": "Big Mac", "price": "₹299", "currency": "INR"},
-    {"name": "French Fries", "price": "$2.49", "currency": "USD"},
-    {"name": "Coca Cola", "price": "₹150", "currency": "INR"},
-    {"name": "Free Sample", "price": "₹0", "currency": "INR"}
+    {"name": "Big Mac", "price": "299", "currency": "INR"},
+    {"name": "Coca Cola", "price": "150", "currency": "INR"},
+    {"name": "Free Sample", "price": "0", "currency": "INR"}
   ]
+}
+
+Example Input 2:
+Walmart
+Bread $3.50
+Milk $2.00
+
+Example Output 2:
+{
+  "type": "irrelevant"
 }
 
 Title Rules:
@@ -29,14 +37,13 @@ Title Rules:
 - If first line contains item-price data, assign title as "Receipt" and include first line as an item
 - If no clear title is identifiable, assign title as "Receipt"
 
-Currency Rules:
-- If price has ₹ symbol, currency is "INR"
-- If price has $ symbol, currency is "USD" 
-- If price has € symbol, currency is "EUR"
-- If price has £ symbol, currency is "GBP"
-- If no currency symbol found, default currency is "INR" and add ₹ symbol to price
-- If an item has no price associated, mark price as "₹0" and currency as "INR"
-- during putting in price dont forget to remove the price symbol from value.
+Currency Rules (STRICT — this is the most important rule):
+- ONLY Indian Rupees (INR) are accepted.
+- If price has ₹ symbol, "Rs", "rs", "rupees", "rupee", or no currency symbol at all → currency is "INR".
+- If price has $, €, £, ¥, or ANY non-INR currency symbol or name (dollar, euro, pound, yen, etc.) → the ENTIRE input is irrelevant. Return {"type": "irrelevant"} immediately.
+- Even if just ONE item uses a non-INR currency, the entire input is irrelevant.
+- Store price as a plain number string without any currency symbol (e.g., "299", not "₹299").
+- If an item has no price associated, set price as "0" and currency as "INR".
 
 Available Categories (USE ONLY THESE — no custom categories allowed):
 - "food" - restaurants, groceries, food delivery, beverages, cafes, bakeries, snacks, meal kits
@@ -66,9 +73,10 @@ Instructions:
 - Analyze both the business name and individual items
 - Assign multiple categories when the receipt contains items from different spending types
 - Use the most specific categories that apply
-- Always include currency field for each item
-- Convert plain numbers to rupees format (e.g., 150 becomes "₹150")
-- If an item line has no recognizable price, set price as "₹0" and currency as "INR"
+- Always include currency field for each item (always "INR")
+- Store prices as plain numbers without symbols (e.g., 150 becomes "150")
+- If an item line has no recognizable price, set price as "0" and currency as "INR"
+- If ANY non-INR currency is detected anywhere in the input, return {"type": "irrelevant"} immediately
 - Always assign a title, even if not explicitly provided
 
 If the input data is not related to menus, receipts, or pricing information, return:

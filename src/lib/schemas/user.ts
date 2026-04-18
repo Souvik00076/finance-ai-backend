@@ -57,13 +57,11 @@ const userSchema = new Schema<IUser>({
   },
   phone: {
     type: String,
-    unique: true,
     sparse: true,
     default: null
   },
   telegram_id: {
     type: String,
-    unique: true,
     sparse: true,
     default: null
   },
