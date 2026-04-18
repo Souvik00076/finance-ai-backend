@@ -7,6 +7,7 @@ import { JsonOutputParser } from "@langchain/core/output_parsers";
 import { AiContent } from "../@types";
 import { validateRequest } from "../utils/utils.validateRequest";
 import { TUserData, UserData } from "../schemas/schema.UserData";
+import { User } from "../schemas/user";
 import { BadRequest } from "../error";
 
 const validator = validateRequest<AiContentDto>(AiContentDto);
@@ -31,6 +32,23 @@ async function handleAnalysis(content: ConsumeMessage) {
     created_at_ms: aiData.created_at
   }]
   await UserData.insertMany(userData)
+
+  const totalAmount = modelResult.items!.reduce((sum, item) => sum + parseFloat(item.price), 0);
+
+  const filter = aiData.origin === 'telegram'
+    ? { telegram_id: aiData.From }
+    : { phone: aiData.From };
+
+  const user = await User.findOneAndUpdate(
+    filter,
+    { $inc: { total_spent: totalAmount } },
+    { new: true }
+  );
+
+  if (user) {
+    console.log(`Updated total_spent for user ${user._id} by ${totalAmount}`);
+  }
+
   console.log("Message loaded in db")
 }
 export async function aiAnalyzaerConsumer() {
