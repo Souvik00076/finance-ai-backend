@@ -33,9 +33,24 @@ export class WebhookController implements IPost {
         aiData.Body = msg;
         aiData.From = String(data.message.from.id);
         console.log(msg);
-        if (msg.toLowerCase() === 'spendly') {
+        if (msg.toLowerCase() === '/start') {
           console.log(msg)
-          await sendTelegramMessage(data.message.from.id, `Welcome to Spendly! Your chat id is ${aiData.From}.`);
+          await sendTelegramMessage(
+            data.message.from.id,
+            `Welcome to Spendly! 🎉
+            Your Chat ID: ${aiData.From}`
+          );
+          await sendTelegramMessage(
+            data.message.from.id,
+            `💡 How to log expenses:
+      Just send messages like:
+        - "Spent 200 on groceries"
+        - "Paid 500 rent"
+        - "Coffee 150"
+        - "Uber 300"
+      Spendly will automatically track them for you. 💸
+      You're all set! 🚀`
+          )
           res.json({ message: "Ok" });
           return;
         }
