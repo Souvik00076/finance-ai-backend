@@ -4,9 +4,9 @@ export class Model {
   private llmInstance: ChatOpenAI;
   private constructor() {
     this.llmInstance = new ChatOpenAI({
-      model: "llama-3.3-70b-versatile",
+      model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
       configuration: {
-        baseURL: 'https://api.groq.com/openai/v1',
+        baseURL: "https://api.groq.com/openai/v1",
         apiKey: process.env.GROQ_API_KEY!,
       },
       streaming: false,
@@ -25,4 +25,3 @@ export class Model {
     return this.llmInstance;
   }
 }
-
