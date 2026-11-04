@@ -6,3 +6,4 @@ export * from "./error.Forbidden";
 export * from "./error.notFound";
 export * from "./error.Broker";
 export * from "./error.server";
+export * from "./error.NonRetryable";

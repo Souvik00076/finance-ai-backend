@@ -15,6 +15,7 @@ export type TUser = {
   is_phone_linked: boolean;
   is_telegram_linked: boolean;
   total_spent: number;
+  total_earned: number;
 }
 
 export interface IUser extends TUser, Document { }
@@ -74,6 +75,10 @@ const userSchema = new Schema<IUser>({
     default: false
   },
   total_spent: {
+    type: Number,
+    default: 0
+  },
+  total_earned: {
     type: Number,
     default: 0
   }

@@ -7,6 +7,7 @@ export type TUserData = {
   items: Item[];
   source: string;
   created_at_ms: number;
+  operation_id?: string;
 }
 
 export interface IUserData extends TUserData, Document { }
@@ -47,7 +48,13 @@ const userDataSchema = new Schema<IUserData>({
   items: {
   type: [itemSchema],
   default: []
-}
+},
+  // Broker operationId: makes retries idempotent. Sparse because older docs don't have it.
+  operation_id: {
+    type: String,
+    unique: true,
+    sparse: true,
+  }
 }, {
   timestamps: true
 });

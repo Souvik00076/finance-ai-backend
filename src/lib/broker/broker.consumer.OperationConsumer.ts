@@ -5,7 +5,7 @@ import type {
   AmqpConnectionManager,
   ChannelWrapper,
 } from "amqp-connection-manager";
-import { BrokerError } from "../error";
+import { BrokerError, NonRetryableError } from "../error";
 
 
 const MAX_RETRIES = 3;
@@ -124,7 +124,12 @@ export class OperationConsumer {
             );
             if (msg && !consumeOptions.noAck) {
               const retryCount = this.getRetryCount(msg);
-              if (retryCount >= MAX_RETRIES) {
+              if (error instanceof NonRetryableError) {
+                this.channel!.nack(msg, false, false);
+                console.warn(
+                  `Message sent to DLQ without retry (non-retryable) [queue: ${this.queue}]: ${error.message}`,
+                );
+              } else if (retryCount >= MAX_RETRIES) {
                 this.channel!.nack(msg, false, false);
                 console.warn(
                   `Message sent to DLQ after ${retryCount} retries [queue: ${this.queue}]`,
