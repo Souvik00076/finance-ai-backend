@@ -378,7 +378,9 @@ Date Rules (the current date is given at the end, in YYYY-MM-DD, India time):
 - Resolve relative dates against the current date: "today", "yesterday", "day before yesterday", "last Friday", "3 days ago".
 - For dates without a year ("1st Nov", "on the 5th"), use the current year. If that date would be in the future, use the previous year. "On the 5th" with no month means the current month, or last month if that day hasn't come yet.
 - Output the date as "YYYY-MM-DD".
-- If no date is mentioned, or the date is vague ("sometime last month"), set "date": null. Do NOT guess.
+- A month without a day ("July", "July 2026", "for July", "July salary", "last month") → the 1st of that month, e.g. "2026-07-01".
+  If a year is given, use it. If no year is given and the 1st of that month in the current year is after the current date, use the previous year.
+- If no date is mentioned, or the date is vague with no month ("sometime last week", "recently", "a while ago"), set "date": null. Do NOT guess.
 - Never output a date later than the current date.
 
 Available Income Categories (USE ONLY THESE):
@@ -471,9 +473,21 @@ Input (current date 2026-01-03): freelance payment 15k came on 28th Dec
 Output: {"type": "income", "entries": [{"amount": "15000", "currency": "INR", "source": "Freelance client", "category": "freelance", "date": "2025-12-28"}]}
 (28 Dec of the current year would be in the future, so use the previous year.)
 
+Input: got 95k salary for july 2026
+Output: {"type": "income", "entries": [{"amount": "95000", "currency": "INR", "source": "Unknown", "category": "salary", "date": "2026-07-01"}]}
+(Month without a day → the 1st of that month.)
+
+Input: december salary 80k credited
+Output: {"type": "income", "entries": [{"amount": "80000", "currency": "INR", "source": "Unknown", "category": "salary", "date": "2025-12-01"}]}
+(No year, and 1 Dec 2026 would be in the future → previous year.)
+
 Input: received 2000 sometime last month
-Output: {"type": "income", "entries": [{"amount": "2000", "currency": "INR", "source": "Unknown", "category": "other", "date": null}]}
-(The date is vague, so it's null. Do not guess.)
+Output: {"type": "income", "entries": [{"amount": "2000", "currency": "INR", "source": "Unknown", "category": "other", "date": "2026-10-01"}]}
+(Last month → the 1st of last month.)
+
+Input: received 3000 sometime last week
+Output: {"type": "income", "entries": [{"amount": "3000", "currency": "INR", "source": "Unknown", "category": "other", "date": null}]}
+(No month and no exact day → null. Do not guess.)
 
 --- Refunds / reimbursements / other ---
 Input: office reimbursed my travel 3,200

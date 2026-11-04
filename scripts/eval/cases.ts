@@ -186,8 +186,19 @@ export const CASES: TestCase[] = [
     note: "Year rollover",
     expect: { type: "income", entryCount: 1, entries: [{ amount: 20000, category: "freelance", date: "2025-12-30" }] } },
   { id: "I47", tag: "income.dates", input: "got 3000 sometime last week",
-    note: "Vague date -> null",
+    note: "Vague date with no month -> null",
     expect: { type: "income", entryCount: 1, entries: [{ amount: 3000, date: null }] } },
+
+  // ───────────── INCOME: month without a day → 1st of that month ─────────────
+  { id: "I48", tag: "income.month", smoke: true, input: "95k salary july 2026",
+    note: "Exact message from production that was stored with the message time",
+    expect: { type: "income", entryCount: 1, entries: [{ amount: 95000, category: "salary", date: "2026-07-01" }] } },
+  { id: "I49", tag: "income.month", input: "march salary 55k received",
+    note: "Month without day or year, in the past",
+    expect: { type: "income", entryCount: 1, entries: [{ amount: 55000, category: "salary", date: "2026-03-01" }] } },
+  { id: "I4A", tag: "income.month", input: "got 40k freelance payment for august",
+    note: "Month without day or year, phrased differently from the prompt examples",
+    expect: { type: "income", entryCount: 1, entries: [{ amount: 40000, category: "freelance", date: "2026-08-01" }] } },
 
   // ───────────── INCOME: example-date leakage (current date != 2026-11-04) ─────────────
   { id: "I50", tag: "income.leak", smoke: true, currentDate: "2026-03-15", input: "received 5000 from rahul today",

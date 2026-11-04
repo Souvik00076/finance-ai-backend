@@ -29,6 +29,8 @@ export function resolveEarnedAt(
   date: string | null | undefined,
   messageMs: number,
 ): { earnedAtMs: number; fromMessage: boolean } {
+  // A month without a day ("2026-07") means the 1st of that month.
+  if (date && /^\d{4}-\d{2}$/.test(date)) date = `${date}-01`;
   if (date) {
     const dayStart = istDayStartMs(date);
     if (dayStart !== null && date <= istDateString(messageMs)) {
